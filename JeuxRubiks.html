@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+      
+
+
+<head>
+<title>Rubiks</title>
+<script language="JavaScript">
+//------------------chrono-----------------
+var iHour = 0; var iMin = 0; var iSec = 0;
+var iCount = 0; var iM=0; var iS=0;
+function startCount(){
+             iCount++;
+             iSec = iCount;
+             if ( iSec>59 ) { iMin= iMin+1 ;  iSec=0 ; iCount=0;}
+             if (  iSec<10 ) {  iS= "0" +iSec;} else {iS=iSec;}
+             if ( iMin>59 ) { iHour= iHour+1 ; iMin=0;}
+             if (  iMin<10 ) {  iM= "0" +iMin;} else {iM=iMin;}
+var chrono="..." +iHour+ ":" +iM+ ":" +iS;
+document.getElementById('clock').value=chrono;
+setTimeout("startCount()",1000);
+}
+//------------------game-----------------
+var colors= new Array('r','r','r','r','r','g','g','g','g','g','b','b','b','b','b','bl','bl','bl','bl','bl','w','y','y','y','y');
+var pics= new Array('red.gif','green.gif','blue.gif','black.gif','yellow.gif','pix.gif');
+var col="";
+var nr; 
+var pos; 
+var valid= false;
+var size = colors.length;
+
+function delete_element(array) {
+   size = colors.length;
+   var validNo = (nr != "NaN");
+   var inRange = ( (nr>=0) && (nr<size) );
+   if (validNo && inRange) {
+       for (var i= 0; i<=size-1; i++) {
+              colors[i] = ((i == nr) ? "delete" : colors[i]);}
+       for (var j= nr; j<size-1; j++) {
+              if (j!= size) {colors[j] = colors[j+1];}}
+colors.length = size-1;
+}}
+function get_col(k) {
+   nr= Math.floor(Math.random()*(size-1));
+   if (colors[nr]=='r') {col=pics[0];}
+   if (colors[nr]=='g') {col=pics[1];}
+   if (colors[nr]=='b') {col=pics[2];}
+   if (colors[nr]=='y') {col=pics[3];}
+   if (colors[nr]=='bl') {col=pics[4];}
+   if (colors[nr]=='w') {col=pics[5];
+       pos=k;}
+delete_element(colors);
+}
+function mix_colors() {
+    self.location.reload(true);
+}
+function check_validity(k) {
+    var Ck=parseInt(k); 
+    valid= false;
+    if ((pos==(Ck-5)) || (pos==Ck+5)) {
+          valid= true;} 
+    if ((pos==(Ck-1)) && (pos!=4) && (pos!=9) && (pos!=14)&& (pos!=19)&& (pos!=24) ) {
+          valid= true;}
+    if ((pos==(Ck+1)) && (pos!=5) && (pos!=10) && (pos!=15)&& (pos!=20)&& (pos!=25)) {
+          valid= true;}
+}
+var temp = new Image();
+function run_game(k) {
+  check_validity(k);
+  if (valid==true) {
+            temp.src= document.images[k].src; 
+            document.images[k].src= document.images[pos].src; 
+            document.images[pos].src= temp.src;
+            pos =k; valid= false;}
+}
+</script>
+<style>
+
+#image{
+      background-image: url('plage.JPG');
+      background-size: cover;
+      background-repeat: no-repeat;
+}
+#mix{
+      background-color: red;
+}
+p{
+      text-align: center;
+}
+
+</style>
+</head>
+  <div  id="image">
+            <body>
+                  <h3>Erno Rubik : L'histoire d'une invention</h3>
+                  <p>
+                     <font size=2><font color=black>
+
+                  Je vais vous raconter la grande histoire du Rubik's Cube vue au travers
+                  de la vie de son inventeur, Erno Rubik. Tout a commencé avec l'homme qui a
+                  inventé ce fameux jouet que l'on appelle aujourd'hui le Rubik's cube. Monsieur
+                  Erno Rubik est passé en quelques années de professeur de design au salaire d'une
+                  centaine d'euros par mois au statut d'homme le plus riche et le plus connu de
+                  Hongrie. Le jouet qu'il a imaginé et construit de ses propres mains dans la
+                  petite chambre de l'appartement de ses parents a rendu fou plusieurs centaines
+                  de millions de personnes. Il continue encore aujourd'hui de fasciner les nouvelles
+                  générations. Lorsqu'Erno Rubik est interrogé sur le pourquoi et le comment de son
+                  invention, il n'a aucun mal à répondre tant cette invention lui a paru évidente.
+                  Mais, pour lui, la vraie
+                  difficulté arriva après la découverte de son invention.</a><br>
+                   inspired from the <a href="http://dev.rubiks.com">Rubik's</a><br>
+             <hr>
+            </p>
+            <p>
+        ... Cliquez sur l'image pour déplacer et aligner les image s aussi vite que possible ...
+            </p>
+            <center ><script>
+            document.write('<table style="cursor:pointer;"><tr>');
+            for (i=0; i<25; i++) {
+                  get_col(i);
+                  if ((i==5) || (i==10) || (i==15)|| (i==20)) {document.write('</tr><tr>');};
+                  document.write('<td><img src="'+col+'" name="'+i+'" width=40px height=40px onmousedown="run_game('+i+')"></td>');}
+            document.write('</tr></table>');
+            </script>
+            <img src="pix.gif" width=100px height=60px border=0>
+            <p><input id="mix" type=button value="mix her" onclick="mix_colors()">&nbsp;
+            <input type=button id="clock" value="chrono" size=6><p><font size=3>
+            </center>
+            <body onload="startCount()">
+</div>
+</body>
+
+</html>
